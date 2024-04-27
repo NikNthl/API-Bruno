@@ -10,8 +10,23 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
-    const users = await usersService.getUsers();
-    return response.status(200).json(users);
+    const pageNumber = parseInt(request.query.page_number) || 1;
+    const pageSize = parseInt(request.query.page_size) || 10;
+    const search = request.query.search || '';
+    const sort = request.query.sort || '';
+
+    const { totalPages, hasPreviousPage, hasNextPage, data } =
+      await usersService.getUsers(pageNumber, pageSize, search, sort);
+
+    return response.status(200).json({
+      page_number: pageNumber,
+      page_size: pageSize,
+      count: data.length,
+      total_pages: totalPages,
+      has_previous_page: hasPreviousPage,
+      has_next_page: hasNextPage,
+      data,
+    });
   } catch (error) {
     return next(error);
   }
