@@ -4,8 +4,8 @@ const { User } = require('../../../models');
  * Get a list of users
  * @returns {Promise}
  */
-async function getUsers(query, skip, limit, sortOption) {
-  return User.find(query).skip(skip).limit(limit).sort(sortOption);
+async function getUsers() {
+  return User.find({});
 }
 
 /**
