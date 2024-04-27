@@ -6,11 +6,46 @@ const { hashPassword, passwordMatched } = require('../../../utils/password');
  * @returns {Array}
  */
 async function getUsers(pageNumber, pageSize, search, sort) {
+  // Set default values if not provided or invalid
+  pageNumber = parseInt(pageNumber) || 1;
+  pageSize = parseInt(pageSize) || 0; // Default to 0 to indicate all data in one page
+
+  // Validate page number and page size
+  if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber <= 0 || pageSize < 0) {
+    throw new Error('Invalid page_number or page_size');
+  }
+
+  let filter = {};
+  let sortField = 'email';
+  let sortOrder = 1; // Default sort order is ascending
+
+  // Parse and validate sort parameter
+  if (sort) {
+    const parts = sort.split(':');
+    if (parts.length === 2) {
+      sortField = parts[0];
+      sortOrder = parts[1].toLowerCase() === 'desc' ? -1 : 1;
+    } else {
+      throw new Error('Invalid sort parameter format');
+    }
+  }
+
+  // Parse and validate search parameter
+  if (search) {
+    const parts = search.split(':');
+    if (parts.length === 2 && (parts[0] === 'email' || parts[0] === 'name')) {
+      filter[parts[0]] = { $regex: new RegExp(parts[1], 'i') };
+    } else {
+      throw new Error('Invalid search parameter format');
+    }
+  }
+
   const { users, totalCount } = await usersRepository.getUsers(
     pageNumber,
     pageSize,
-    search,
-    sort
+    filter,
+    sortField,
+    sortOrder
   );
 
   const results = [];

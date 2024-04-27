@@ -4,24 +4,21 @@ const { User } = require('../../../models');
  * Get a list of users
  * @returns {Promise}
  */
-async function getUsers(pageNumber, pageSize, search, sort) {
-  const filter = (pageNumber - 1) * pageSize;
+async function getUsers(pageNumber, pageSize, filter, sortField, sortOrder) {
+  const skip = (pageNumber - 1) * pageSize;
 
   let pagination = User.find({});
 
-  // Search filter
-  if (search) {
-    pagination = pagination.find({ email: { $regex: search, $options: 'i' } });
-  }
+  // Sorting
+  const sortOptions = {};
+  sortOptions[sortField] = sortOrder;
+  pagination = pagination.sort(sortOptions);
 
-  // Sorting filter
-  if (sort) {
-    const [field, order] = sort.split(':');
-    pagination = pagination.sort({ [field]: order === 'asc' ? 1 : -1 });
-  }
+  // Pagination
+  pagination = pagination.skip(skip).limit(pageSize);
 
-  const users = await pagination.skip(filter).limit(pageSize);
-  const totalCount = await User.countDocuments();
+  const users = await pagination;
+  const totalCount = await User.countDocuments(filter);
 
   return { users, totalCount };
 }

@@ -11,7 +11,7 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 async function getUsers(request, response, next) {
   try {
     const pageNumber = parseInt(request.query.page_number) || 1;
-    const pageSize = parseInt(request.query.page_size) || 10;
+    const pageSize = parseInt(request.query.page_size) || 0;
     const search = request.query.search || '';
     const sort = request.query.sort || '';
 
