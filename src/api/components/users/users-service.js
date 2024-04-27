@@ -5,8 +5,13 @@ const { hashPassword, passwordMatched } = require('../../../utils/password');
  * Get list of users
  * @returns {Array}
  */
-async function getUsers() {
-  const users = await usersRepository.getUsers();
+async function getUsers(pageNumber, pageSize, search, sort) {
+  const { users, totalCount } = await usersRepository.getUsers(
+    pageNumber,
+    pageSize,
+    search,
+    sort
+  );
 
   const results = [];
   for (let i = 0; i < users.length; i += 1) {
@@ -18,7 +23,17 @@ async function getUsers() {
     });
   }
 
-  return results;
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const hasPreviousPage = pageNumber > 1;
+  const hasNextPage = pageNumber < totalPages;
+
+  return {
+    totalCount,
+    totalPages,
+    hasPreviousPage,
+    hasNextPage,
+    data: results,
+  };
 }
 
 /**
