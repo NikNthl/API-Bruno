@@ -10,8 +10,8 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
-    const pageNumber = parseInt(request.query.page_number) || '1';
-    const pageSize = parseInt(request.query.page_size) || '6';
+    const pageNumber = parseInt(request.query.page_number);
+    const pageSize = parseInt(request.query.page_size);
     const search = request.query.search;
     const sort = request.query.sort;
 
