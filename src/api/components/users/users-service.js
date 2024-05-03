@@ -3,10 +3,14 @@ const { hashPassword, passwordMatched } = require('../../../utils/password');
 
 /**
  * Get list of users
+ * @param {number} pageNumber - Nomor halaman
+ * @param {number} pageSize - Jumlah data per halaman
+ * @param {string} search - Pencarian
+ * @param {string} sort - Pengurutan
  * @returns {Array}
  */
 async function getUsers(pageNumber, pageSize, search, sort) {
-  const { users, totalCount } = await usersRepository.getUsers(
+  const { users, count } = await usersRepository.getUsers(
     pageNumber,
     pageSize,
     search,
@@ -23,12 +27,12 @@ async function getUsers(pageNumber, pageSize, search, sort) {
     });
   }
 
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const totalPages = Math.ceil(count / pageSize);
   const hasPreviousPage = pageNumber > 1;
   const hasNextPage = pageNumber < totalPages;
 
   return {
-    totalCount,
+    count,
     totalPages,
     hasPreviousPage,
     hasNextPage,
