@@ -1,29 +1,39 @@
 const { User } = require('../../../models');
+const { name, email } = require('../../../models/users-schema');
 
 /**
  * Get a list of users
+ * @param {number} pageNumber - Nomor halaman
+ * @param {number} pageSize - Jumlah data per halaman
+ * @param {string} search - Pencarian
+ * @param {string} sort - Pengurutan
  * @returns {Promise}
  */
 async function getUsers(pageNumber, pageSize, search, sort) {
   const filter = (pageNumber - 1) * pageSize;
 
-  let pagination = User.find({});
+  let query = User.find({});
 
-  // Search filter
+  // Searching
   if (search) {
-    pagination = pagination.find({ email: { $regex: search, $options: 'i' } });
+    const [field, order] = search.toLowerCase().split(':');
+    const regex = new RegExp(order, 'i');
+    query = query.find({ [field]: { $regex: regex } });
   }
 
-  // Sorting filter
+  // Sorting
   if (sort) {
-    const [field, order] = sort.split(':');
-    pagination = pagination.sort({ [field]: order === 'asc' ? 1 : -1 });
+    const [field, order] = sort.toLowerCase().split(':');
+    query = query.sort({ [field]: order === 'asc' ? 1 : -1 });
+  } else {
+    // default sorting secara ascending
+    query = query.sort({ name: 1 });
   }
 
-  const users = await pagination.skip(filter).limit(pageSize);
-  const totalCount = await User.countDocuments();
+  const users = await query.skip(filter).limit(pageSize);
+  const count = await User.countDocuments();
 
-  return { users, totalCount };
+  return { users, count };
 }
 
 /**
