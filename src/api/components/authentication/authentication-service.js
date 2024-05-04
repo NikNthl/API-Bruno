@@ -26,15 +26,15 @@ function userBanned(email, password) {
 async function checkLoginCredentials(email, password) {
   // Check if email is banned due to too many failed login attempts
   if (userBanned(email, password)) {
-    const lastLoginAttempts = loginFailed[(email, password)].timestamp;
+    const lastLogin = loginFailed[(email, password)].timestamp;
 
     // Check if user unbanned
-    if (Date.now() - lastLoginAttempts < banned) {
+    if (Date.now() - lastLogin < banned) {
       // Return null to indicate too many failed attempts
       return null;
     } else {
       // Reset failed login attempts if already unbanned
-      delete lastLoginAttempts[(email, password)];
+      delete lastLogin[(email, password)];
     }
   }
 
