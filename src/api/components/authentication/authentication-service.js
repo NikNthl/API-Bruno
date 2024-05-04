@@ -13,7 +13,7 @@ const loginFailed = {};
 function userBanned(email, password) {
   return (
     loginFailed[(email, password)] &&
-    loginFailed[(email, password)].attempts >= limitLoginFailed
+    loginFailed[(email, password)].attempts > limitLoginFailed
   );
 }
 
@@ -27,13 +27,14 @@ async function checkLoginCredentials(email, password) {
   // Check if email is banned due to too many failed login attempts
   if (userBanned(email, password)) {
     const lastLoginAttempts = loginFailed[(email, password)].timestamp;
+
     // Check if user unbanned
     if (Date.now() - lastLoginAttempts < banned) {
       // Return null to indicate too many failed attempts
       return null;
     } else {
       // Reset failed login attempts if already unbanned
-      delete loginFailed[(email, password)];
+      delete lastLoginAttempts[(email, password)];
     }
   }
 
@@ -68,11 +69,6 @@ async function checkLoginCredentials(email, password) {
     } else {
       loginFailed[(email, password)].attempts++;
       loginFailed[(email, password)].timestamp = Date.now();
-    }
-
-    // Check if user should be banned
-    if (loginFailed[(email, password)].attempts >= limitLoginFailed) {
-      loginFailed[(email, password)].timestamp = Date.now(); // Update timestamp for ban
     }
   }
   return null;
