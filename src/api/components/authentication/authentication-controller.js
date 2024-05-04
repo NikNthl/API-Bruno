@@ -19,10 +19,19 @@ async function login(request, response, next) {
     );
 
     if (!loginSuccess) {
-      throw errorResponder(
-        errorTypes.INVALID_CREDENTIALS,
-        'Wrong email or password'
-      );
+      // Check if the number of failed attempts has exceeded the limit
+      if (authenticationServices.userBanned(email, password)) {
+        return response.status(403).json({
+          error: errorTypes.FORBIDDEN,
+          description: 'Too many failed login attempts',
+        });
+      }
+
+      // If not, respond with INVALID_CREDENTIALS error
+      return response.status(403).json({
+        error: errorTypes.INVALID_CREDENTIALS,
+        description: 'Invalid email or password',
+      });
     }
 
     return response.status(200).json(loginSuccess);
