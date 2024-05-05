@@ -1,7 +1,7 @@
 const marketplaceSchema = {
-  namaBarang: String,
-  hargaBarang: Number,
-  stokBarang: Number,
+  nama_barang: String,
+  harga_barang: Number,
+  stok_barang: Number,
 };
 
 module.exports = marketplaceSchema;
