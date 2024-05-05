@@ -31,7 +31,7 @@ module.exports = (app) => {
     marketplaceControllers.getMarketplace
   );
 
-  // Update items
+  // Change items
   route.put(
     '/:id',
     celebrate(marketplaceValidator.updateMarketplace),

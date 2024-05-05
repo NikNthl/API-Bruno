@@ -1,5 +1,9 @@
 const marketplaceRepository = require('./marketplace-repository');
 
+/**
+ * Get list of marketplace items
+ * @returns {Array}
+ */
 async function getMarketplaces() {
   const marketplaces = await marketplaceRepository.getMarketplaces();
 
@@ -17,6 +21,11 @@ async function getMarketplaces() {
   return results;
 }
 
+/**
+ * Get marketplace items detail
+ * @param {string} id - item ID
+ * @returns {Object}
+ */
 async function getMarketplace(id) {
   const marketplace = await marketplaceRepository.getMarketplace(id);
 
@@ -32,6 +41,13 @@ async function getMarketplace(id) {
   };
 }
 
+/**
+ * Create marketplace items
+ * @param {string} nama_barang - Nama Barang
+ * @param {number} harga_barang - Harga Barang
+ * @param {number} stok_barang - Stok Barang
+ * @returns {boolean}
+ */
 async function createMarketplace(nama_barang, harga_barang, stok_barang) {
   try {
     await marketplaceRepository.createMarketplace(
@@ -46,6 +62,14 @@ async function createMarketplace(nama_barang, harga_barang, stok_barang) {
   return true;
 }
 
+/**
+ * Change marketplace items
+ * @param {id} id - item ID
+ * @param {string} nama_barang - item name
+ * @param {number} harga_barang - item price
+ * @param {number} stok_barang - item stock
+ * @returns {boolean}
+ */
 async function updateMarketplace(id, nama_barang, harga_barang, stok_barang) {
   const marketplace = await marketplaceRepository.getMarketplace(id);
 
@@ -67,6 +91,11 @@ async function updateMarketplace(id, nama_barang, harga_barang, stok_barang) {
   return true;
 }
 
+/**
+ * Delete marketplace items
+ * @param {id} id - item ID
+ * @returns {boolean}
+ */
 async function deleteMarketplace(id) {
   const marketplace = await marketplaceRepository.getMarketplace(id);
 

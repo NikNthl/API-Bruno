@@ -1,6 +1,13 @@
 const marketplaceService = require('./marketplace-service');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 
+/**
+ * Handle get list of items marketplace
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
 async function getMarketplaces(request, response, next) {
   try {
     const marketplaces = await marketplaceService.getMarketplaces();
@@ -10,6 +17,13 @@ async function getMarketplaces(request, response, next) {
   }
 }
 
+/**
+ * Handle marketplace items detail
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
 async function getMarketplace(request, response, next) {
   try {
     const marketplace = await marketplaceService.getMarketplace(
@@ -29,6 +43,13 @@ async function getMarketplace(request, response, next) {
   }
 }
 
+/**
+ * Handle create marketplace items
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
 async function createMarketplace(request, response, next) {
   try {
     const { nama_barang, harga_barang, stok_barang } = request.body;
@@ -54,6 +75,13 @@ async function createMarketplace(request, response, next) {
   }
 }
 
+/**
+ * Handle change marketplace items
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
 async function updateMarketplace(request, response, next) {
   try {
     const id = request.params.id;
@@ -81,6 +109,13 @@ async function updateMarketplace(request, response, next) {
   }
 }
 
+/**
+ * Handle delete marketplace items
+ * @param {object} request - Express request object
+ * @param {object} response - Express response object
+ * @param {object} next - Express route middlewares
+ * @returns {object} Response object or pass an error to the next route
+ */
 async function deleteMarketplace(request, response, next) {
   try {
     const id = request.params.id;
