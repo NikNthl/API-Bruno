@@ -1,5 +1,4 @@
 const { User } = require('../../../models');
-const { name, email } = require('../../../models/users-schema');
 
 /**
  * Get a list of users
