@@ -1,6 +1,6 @@
 const marketplaceSchema = {
   namaBarang: String,
-  hargaBarang: String,
+  hargaBarang: Number,
   stokBarang: Number,
 };
 
